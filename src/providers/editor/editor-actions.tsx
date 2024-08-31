@@ -26,11 +26,11 @@ export type EditorAction =
         elementDetails?:
           | EditorElement
           | {
-              id: "";
+              id: "__body";
               content: [];
-              name: "";
+              name: "Body";
               styles: {};
-              type: null;
+              type: "__body";
             };
       };
     }

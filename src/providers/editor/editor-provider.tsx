@@ -13,7 +13,9 @@ export type EditorElement = {
   styles: React.CSSProperties;
   name: string;
   type: EditorBtns;
-  content: EditorElement[] | { href?: string };
+  content:
+    | EditorElement[]
+    | { href?: string; backgroundImage?: string; innerText?: string };
 };
 
 export type Editor = {
@@ -479,7 +481,7 @@ const EditorProvider = (props: EditorProps) => {
 export const useEditor = () => {
   const context = useContext(EditorContext);
   if (!context) {
-    throw new Error("useEditor Hook must be used within the editor Provider");
+    throw new Error("useEditor Hook must be used within the EditorProvider");
   }
   return context;
 };
