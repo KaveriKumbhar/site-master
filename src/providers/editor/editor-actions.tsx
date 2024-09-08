@@ -65,8 +65,15 @@ export type EditorAction =
       };
     }
   | {
+      type: "CREATE_DATABASE";
+      payload: {
+        databaseName: string;
+      };
+    }
+  | {
       type: "SET_FUNNELPAGE_ID";
       payload: {
         funnelPageId: string;
+        databaseName?: string;
       };
     };

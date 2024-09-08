@@ -4,6 +4,7 @@ import { User } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import Test from "./Test";
 
 type Props = {
   user?: null | User;
@@ -30,6 +31,7 @@ const Navigation = ({ user }: Props) => {
         </ul>
       </nav>
       <aside className="flex gap-2 items-center">
+        {/* <Test />    |   can be used to test the create a new user functionality*/}
         <SignedOut>
           <Link
             href={"/agency"}

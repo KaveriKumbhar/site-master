@@ -16,7 +16,7 @@ const Funnel = () => {
 
         <FunnelSidebar pageId={"v4"} subaccountId="" />
       </EditorProvider>
-    </div>
+    </div> 
   );
 };
 

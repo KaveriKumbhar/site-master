@@ -7,6 +7,7 @@ import { createContext, Dispatch, useContext, useReducer } from "react";
 // ----------------------------- TYPES -----------------------------------
 
 export type DeviceTypes = "Desktop" | "Tablet" | "Mobile";
+export type DatabaseTypes = "MongoDB" | "MySQL" | "Postgresql" | null;
 
 export type EditorElement = {
   id: string;
@@ -16,6 +17,15 @@ export type EditorElement = {
   content:
     | EditorElement[]
     | { href?: string; backgroundImage?: string; innerText?: string };
+};
+
+export type UserInfo = {
+  userId: string;
+  hasDatabase: boolean;
+  databaseType: DatabaseTypes;
+  databaseName: string | undefined;
+  collections: string[];
+  tables: string[];
 };
 
 export type Editor = {
@@ -33,6 +43,7 @@ export type HistoryState = {
 };
 
 export type EditorState = {
+  user: UserInfo;
   editor: Editor;
   history: HistoryState;
 };
@@ -74,6 +85,14 @@ const initialHistoryState: HistoryState = {
 // initial state values - state when the editor will be rendered for the first time
 
 const initialState: EditorState = {
+  user: {
+    userId: "",
+    hasDatabase: false,
+    databaseType: null,
+    databaseName: "",
+    collections: [],
+    tables: [],
+  },
   editor: initialEditorState,
   history: initialHistoryState,
 };
@@ -404,20 +423,30 @@ const editorReducer = (
         ...state.editor,
         funnelPageId,
       };
-      const updatedHistoryStateWithFunnelPageId = [
+
+      const updatedHistoryWithFunnelPageId = [
         ...state.history.history.slice(0, state.history.currentIdx + 1),
-        { ...updatedEditorStateWithFunnelPageId },
+        { ...updatedEditorStateWithFunnelPageId }, // Save a copy of the updated state
       ];
 
-      const funnelPageIdState: EditorState = {
+      const funnelPageIdState = {
         ...state,
         editor: updatedEditorStateWithFunnelPageId,
         history: {
           ...state.history,
-          history: updatedHistoryStateWithFunnelPageId,
-          currentIdx: updatedHistoryStateWithFunnelPageId.length - 1,
+          history: updatedHistoryWithFunnelPageId,
+          currentIndex: updatedHistoryWithFunnelPageId.length - 1,
         },
       };
+      return funnelPageIdState;
+
+    case "CREATE_DATABASE":
+      let updatedUserInfo = {
+        ...state.user,
+        databaseName: action.payload.databaseName,
+      };
+      return { ...state, user: updatedUserInfo };
+
     default:
       return state;
   }

@@ -27,7 +27,7 @@ const TabList = (props: Props) => {
         <SquareStackIcon />
       </TabsTrigger>
       <TabsTrigger
-        value="Media"
+        value="Database"
         className="w-10 h-10 p-0 data-[state=active]:bg-muted rounded-full"
       >
         <Database />

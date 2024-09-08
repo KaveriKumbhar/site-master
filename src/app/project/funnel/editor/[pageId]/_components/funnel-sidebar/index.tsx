@@ -14,6 +14,8 @@ import { TabsContent } from "@radix-ui/react-tabs";
 import { useEditor } from "@/providers/editor/editor-provider";
 import SettingsTab from "./tabs/settings-tab";
 import ComponentsTab from "./tabs/component-tab";
+import { LayersTab } from "./tabs/layers-tab";
+import DatabaseTab from "./tabs/database-tab";
 
 type Props = {
   pageId: string;
@@ -49,10 +51,10 @@ const FunnelSidebar = ({ pageId, subaccountId }: Props) => {
               {/* Header */}
               <SheetHeader className="text-left p-6">
                 {/* Title */}
-                <SheetTitle>"koi acha title lagav be"</SheetTitle>
+                <SheetTitle>Settings</SheetTitle>
 
                 {/* Description */}
-                <SheetDescription>something something...</SheetDescription>
+                <SheetDescription>customize it</SheetDescription>
               </SheetHeader>
 
               {/* Content */}
@@ -64,7 +66,7 @@ const FunnelSidebar = ({ pageId, subaccountId }: Props) => {
               {/* Header */}
               <SheetHeader className="text-left p-6">
                 {/* Title */}
-                <SheetTitle>"Components"</SheetTitle>
+                <SheetTitle>Components</SheetTitle>
 
                 {/* Description */}
                 <SheetDescription>Just Drag and drop</SheetDescription>
@@ -72,6 +74,30 @@ const FunnelSidebar = ({ pageId, subaccountId }: Props) => {
 
               {/* Content */}
               <ComponentsTab />
+            </TabsContent>
+
+            {/* Layers Tab */}
+            <TabsContent value="Layers">
+              {/* Header */}
+              <SheetHeader className="text-left p-6">
+                {/* Title */}
+                <SheetTitle>Layers</SheetTitle>
+              </SheetHeader>
+
+              {/* Content */}
+              <LayersTab />
+            </TabsContent>
+
+            {/* Layers Tab */}
+            <TabsContent value="Database">
+              {/* Header */}
+              <SheetHeader className="text-left p-6">
+                {/* Title */}
+                <SheetTitle>Database</SheetTitle>
+              </SheetHeader>
+
+              {/* Content */}
+              <DatabaseTab />
             </TabsContent>
           </div>
         </SheetContent>

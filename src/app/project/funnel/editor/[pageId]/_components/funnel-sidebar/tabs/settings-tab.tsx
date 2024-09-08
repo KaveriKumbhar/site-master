@@ -91,7 +91,7 @@ const SettingsTab = (props: Props) => {
     >
       <AccordionItem
         value="Custom"
-        className="px-6 py-0  "
+        className="px-6 py-0 border-t"
       >
         <AccordionTrigger className="!no-underline">Custom</AccordionTrigger>
         <AccordionContent>
@@ -111,7 +111,7 @@ const SettingsTab = (props: Props) => {
       </AccordionItem>
       <AccordionItem
         value="Typography"
-        className="px-6 py-0  border-y-[1px]"
+        className="px-6 py-0  border-b-[1px]"
       >
         <AccordionTrigger className="!no-underline">
           Typography
