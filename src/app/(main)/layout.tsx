@@ -11,6 +11,6 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider appearance={{ baseTheme: dark }}>{children}</ClerkProvider>
+    <div>{children}</div>
   );
 }

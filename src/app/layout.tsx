@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +22,7 @@ export default function RootLayout({
 }>) {
   return (
       <html lang="en" suppressHydrationWarning>
+        <ClerkProvider appearance={{ baseTheme: dark }}>
         <body className={inter.className}>
           <TooltipProvider>
             <ThemeProvider
@@ -34,6 +37,7 @@ export default function RootLayout({
             </ThemeProvider>
           </TooltipProvider>
         </body>
+        </ClerkProvider>
       </html>
   );
 }
