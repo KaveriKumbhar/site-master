@@ -5,13 +5,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 import { ModeToggle } from "@/components/global/mode-toggle";
 import { pricingCards } from "@/lib/constants";
-import Image from 'next/image';
-import clsx from 'clsx'
-import Link from 'next/link'
-import { Check } from 'lucide-react'
+import Image from "next/image";
+import clsx from "clsx";
+import Link from "next/link";
+import { Check } from "lucide-react";
+import Component_83613467_e5ba_4c25_981b_f93c02a35ca3 from "@/components/Component_83613467_e5ba_4c25_981b_f93c02a35ca3";
 
 export default function Home() {
   return (
@@ -40,7 +41,7 @@ export default function Home() {
         {/* Image Section */}
         <div className="relative mt-2 md:mt-[-20px] flex justify-center items-center w-full max-w-screen-lg">
           <Image
-            src={'/assets/preview.png'}
+            src={"/assets/preview.png"}
             alt="banner image"
             height={800}
             width={1200}
@@ -52,25 +53,27 @@ export default function Home() {
       </section>
       <section className="flex justify-center items-center flex-col gap-4 md:!mt-20 mt-[-40px]">
         <h2 className="text-4xl text-center">Choose what fits you right</h2>
-        <p className="text-muted-foreground text-center">Our straightforward pricing plans are tailored to meet your needs. If { " you're "} not <br />
-        ready to commit you can get started for free.
+        <p className="text-muted-foreground text-center">
+          Our straightforward pricing plans are tailored to meet your needs. If{" "}
+          {" you're "} not <br />
+          ready to commit you can get started for free.
         </p>
         <div className="flex items-center justify-center gap-4 flex-wrap mt-6">
           {pricingCards.map((card) => (
             //WIP : Wire up free product from stripe.
             <Card
-            key={card.title}
-            className={clsx('w-[300px] flex flex-col justify-between', {
-              'border-2 border-primary': card.title === 'Unlimited Saas',
-            })}
-          >
-            <CardHeader>
-              <CardTitle
-                className={clsx('', {
-                  'text-muted-foreground': card.title !== 'Unlimited Saas',
-                })}
-              >
-                 {card.title}
+              key={card.title}
+              className={clsx("w-[300px] flex flex-col justify-between", {
+                "border-2 border-primary": card.title === "Unlimited Saas",
+              })}
+            >
+              <CardHeader>
+                <CardTitle
+                  className={clsx("", {
+                    "text-muted-foreground": card.title !== "Unlimited Saas",
+                  })}
+                >
+                  {card.title}
                 </CardTitle>
                 <CardDescription>
                   {
@@ -80,32 +83,26 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <span className="text-4xl font-bold">
-                  {card.price}
-                </span>
+                <span className="text-4xl font-bold">{card.price}</span>
                 <span className="text-muted-foreground">
                   <span>/m</span>
                 </span>
               </CardContent>
               <CardFooter className="flex flex-col items-start gap-4">
                 <div>
-                  {card.features.map((features)=> (
-                    <div 
-                    key={features}
-                    className="flex gap-2 items-center"
-                    >
-                      <Check className="text-muted-foreground"/>
+                  {card.features.map((features) => (
+                    <div key={features} className="flex gap-2 items-center">
+                      <Check className="text-muted-foreground" />
                       <p>{features}</p>
-                      </div>
+                    </div>
                   ))}
                 </div>
                 <Link
                   href={`/agency?plan=${card.priceId}`}
                   className={clsx(
-                    'w-full text-center bg-primary p-2 rounded-md',
+                    "w-full text-center bg-primary p-2 rounded-md",
                     {
-                      '!bg-muted-foreground':
-                        card.title !== 'Unlimited Saas',
+                      "!bg-muted-foreground": card.title !== "Unlimited Saas",
                     }
                   )}
                 >
@@ -115,6 +112,7 @@ export default function Home() {
             </Card>
           ))}
         </div>
+        <Component_83613467_e5ba_4c25_981b_f93c02a35ca3 />
       </section>
     </>
   );

@@ -127,9 +127,15 @@ B (255 */
 }
 
 /* Custom scrollbar styles */
+
+.no-scrollbar {
+  scrollbar-width: none;
+  overflow: scroll;
+}
+
 .custom-scrollbar {
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #003ecf transparent; /* Firefox */
+  scrollbar-width: thin; 
+  scrollbar-color: #003ecf transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {

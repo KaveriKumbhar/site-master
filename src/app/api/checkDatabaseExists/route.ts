@@ -10,6 +10,9 @@ export async function POST(req: NextRequest) {
     // Parse the request body
     const { database, collection } = await req.json();
 
+    console.log(req.body!);
+    
+
     // Prepare the headers
     const headers = {
       Accept: "application/json",

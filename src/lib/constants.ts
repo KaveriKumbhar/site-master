@@ -210,16 +210,17 @@ export const icons = [
 ]
 
 export type EditorBtns =
-  | 'text'
-  | 'container'
+  | 'p'
+  | 'div'
   | 'section'
   | 'contactForm'
   | 'paymentForm'
-  | 'link'
-  | '2Col'
+  | 'a'
+  | '2Col' 
   | 'video'
   | '__body'
   | 'image'
+  | 'component'
   | null
   | '3Col'
 

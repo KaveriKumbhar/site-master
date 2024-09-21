@@ -9,7 +9,7 @@ const Funnel = () => {
       <EditorProvider subaccountId={""} funnelId="">
         <FunnelNavigation funnelId={"v4"} subaccountId="" />
 
-        <div className="h-full flex justify-center">
+        <div className="h-full flex justify-center no-scrollbar">
           <FunnelEditor pageId=""/>
         </div>
 

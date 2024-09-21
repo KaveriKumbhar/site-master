@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import CodeGeneratorButton from "@/lib/codeGenerator";
 import getUserId from "@/lib/getUserId";
 import { useEditor } from "@/providers/editor/editor-provider";
 import React, { useEffect, useState } from "react";
@@ -131,6 +132,11 @@ const DatabaseTab = (props: Props) => {
           <Button onClick={onConnect}>Create</Button>
         </div>
       )}
+
+      <div className="flex flex-col gap-4">
+        <Label className="text-muted-foreground">Next.js Code Generator</Label>
+        <CodeGeneratorButton elements={state.editor.elements} />
+      </div>
     </div>
   );
 };

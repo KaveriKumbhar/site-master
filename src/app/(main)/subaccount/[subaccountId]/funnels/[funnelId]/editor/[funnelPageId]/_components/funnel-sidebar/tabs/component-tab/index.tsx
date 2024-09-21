@@ -6,8 +6,13 @@ import {
 } from "@/components/ui/accordion";
 import { EditorBtns } from "@/lib/constants";
 import React from "react";
-import TextElement from "./TextElement";
+import TextElement from "./text-placeholder";
 import ContainerPlaceholder from "./container-placeholder";
+import VideoPlaceholder from "./video-placeholder";
+import LinkPlaceholder from "./link-placeholder";
+import TwoColumnsPlaceHolder from "./two-columns-placeholder";
+import ContactFormPlaceHolder from "./contact-form-placeholder";
+import ComponentPlaceholder from "./component-placeholder";
 
 type Props = {};
 
@@ -21,13 +26,49 @@ const ComponentsTab = (props: Props) => {
     {
       Component: <TextElement />,
       label: "Text",
-      id: "text",
+      id: "p",
       group: "elements",
     },
     {
       Component: <ContainerPlaceholder />,
       label: "Container",
-      id: "container",
+      id: "div",
+      group: "layout",
+    },
+    {
+      Component: <VideoPlaceholder />,
+      label: "Video",
+      id: "video",
+      group: "elements",
+    },
+    {
+      Component: <ContactFormPlaceHolder />,
+      label: "Contact",
+      id: "contactForm",
+      group: "elements",
+    },
+    // {
+    //   Component: <CheckoutPlaceholder />,
+    //   label: "Checkout",
+    //   id: "paymentForm",
+    //   group: "elements",
+    // },
+    {
+      Component: <LinkPlaceholder />,
+      label: "Link",
+      id: "a",
+      group: "elements",
+    },
+    {
+      Component: <ComponentPlaceholder />,
+      label: "Component",
+      id: "component",
+      group: "elements",
+    },
+    {
+      Component: <TwoColumnsPlaceHolder />,
+      label: "2Col",
+      id: "2Col",
       group: "layout",
     },
   ];
@@ -56,7 +97,7 @@ const ComponentsTab = (props: Props) => {
       </AccordionItem>
       <AccordionItem value="Elements" className="px-6 py-0 border-y-[1px]">
         <AccordionTrigger className="!no-underline">Elements</AccordionTrigger>
-        <AccordionContent>
+        <AccordionContent className="flex flex-wrap gap-2 ">
           {elements
             .filter((ele) => ele.group === "elements")
             .map((ele) => (

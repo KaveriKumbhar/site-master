@@ -36,6 +36,12 @@ const FunnelSidebar = ({ pageId, subaccountId }: Props) => {
             { hidden: state.editor.previewMode }
           )}
         >
+          {/* Keep it as it is or it will raise an error warning */}
+          <SheetHeader className="text-left p-6">
+            <SheetTitle></SheetTitle>
+            <SheetDescription></SheetDescription>
+          </SheetHeader>
+          {/* -------------------------------------------------- */}
           <TabList />
         </SheetContent>
         <SheetContent

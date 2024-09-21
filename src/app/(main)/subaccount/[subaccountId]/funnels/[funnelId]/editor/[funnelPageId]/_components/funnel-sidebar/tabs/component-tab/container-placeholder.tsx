@@ -13,7 +13,7 @@ const ContainerPlaceholder = (props: Props) => {
     <div
       className="h-14 w-14 bg-muted/70 rounded-lg p-2 flex flex-row gap-[4px]"
       draggable
-      onDragStart={(e) => omDragStart(e, "container")}
+      onDragStart={(e) => omDragStart(e, "div")}
     >
       <div className="border-dashed border-[1px] h-full rounded-sm bg-muted border-muted-foreground/50 w-full"></div>
     </div>
