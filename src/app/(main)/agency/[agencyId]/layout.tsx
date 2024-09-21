@@ -43,8 +43,8 @@
 
 // export default layout
 
-//import BlurPage from '@/components/global/blur-page'
-//import InfoBar from '@/components/global/infobar'
+import BlurPage from '@/components/global/blur-page'
+import InfoBar from '@/components/global/infobar'
 import Sidebar from '@/components/sidebar'
 import Unauthorized from '@/components/unauthorized'
 import {
@@ -81,8 +81,6 @@ const layout = async ({ children, params }: Props) => {
   let allNoti: any = []
   const notifications = await getNotificationAndUser(agencyId)
   if (notifications) allNoti = notifications
-
- 
 
   return (
     <div className="h-screen overflow-hidden">

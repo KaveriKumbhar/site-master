@@ -96,6 +96,7 @@ model Agency {
   companyEmail     String                @db.Text
   companyPhone     String
   whiteLabel       Boolean               @default(true)
+  customerId       String
   address          String
   city             String
   zipCode          String
