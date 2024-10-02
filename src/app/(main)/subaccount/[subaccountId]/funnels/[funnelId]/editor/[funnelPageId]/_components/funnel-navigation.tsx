@@ -165,40 +165,36 @@ const FunnelEditorNavigation = ({
           >
             <TabsList className="grid w-full grid-cols-3 bg-transparent h-fit">
               <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger
-                    value="Desktop"
-                    className="data-[state=active]:bg-muted w-10 h-10 p-0"
-                  >
-                    <Laptop />
-                  </TabsTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
+                {/* <TooltipTrigger> */}
+                <TabsTrigger
+                  value="Desktop"
+                  className="data-[state=active]:bg-muted w-10 h-10 p-0"
+                >
+                  <Laptop />
+                </TabsTrigger>
+                {/* </TooltipTrigger> */}
+                {/* <TooltipContent>
                   <p>Desktop</p>
-                </TooltipContent>
+                </TooltipContent> */}
               </Tooltip>
               <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger
-                    value="Tablet"
-                    className="w-10 h-10 p-0 data-[state=active]:bg-muted"
-                  >
-                    <Tablet />
-                  </TabsTrigger>
-                </TooltipTrigger>
+                <TabsTrigger
+                  value="Tablet"
+                  className="w-10 h-10 p-0 data-[state=active]:bg-muted"
+                >
+                  <Tablet />
+                </TabsTrigger>
                 <TooltipContent>
                   <p>Tablet</p>
                 </TooltipContent>
               </Tooltip>
               <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger
-                    value="Mobile"
-                    className="w-10 h-10 p-0 data-[state=active]:bg-muted"
-                  >
-                    <Smartphone />
-                  </TabsTrigger>
-                </TooltipTrigger>
+                <TabsTrigger
+                  value="Mobile"
+                  className="w-10 h-10 p-0 data-[state=active]:bg-muted"
+                >
+                  <Smartphone />
+                </TabsTrigger>
                 <TooltipContent>
                   <p>Mobile</p>
                 </TooltipContent>
@@ -242,7 +238,8 @@ const FunnelEditorNavigation = ({
               Publish
             </div>
             <span className="text-muted-foreground text-sm">
-              Last updated {funnelPageDetails.updatedAt.toLocaleDateString()}
+              Last updated :{" "}
+              {/* {funnelPageDetails.updatedAt.toLocaleDateString()} */}
             </span>
           </div>
           <Button onClick={handleOnSave}>Save</Button>

@@ -21,9 +21,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning suppressContentEditableWarning>
+      <body className={inter.className}>
         <ClerkProvider appearance={{ baseTheme: dark }}>
-        <body className={inter.className}>
           <TooltipProvider>
             <ThemeProvider
               attribute="class"
@@ -36,8 +36,8 @@ export default function RootLayout({
               <SonnerToaster />
             </ThemeProvider>
           </TooltipProvider>
-        </body>
         </ClerkProvider>
-      </html>
+      </body>
+    </html>
   );
 }

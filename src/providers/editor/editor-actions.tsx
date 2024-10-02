@@ -21,6 +21,13 @@ export type EditorAction =
       };
     }
   | {
+      type: "REORDER_ELEMENTS";
+      payload: {
+        sourceId: string;
+        targetId: string;
+      };
+    }
+  | {
       type: "CHANGE_CLICKED_ELEMENT";
       payload: {
         elementDetails?:

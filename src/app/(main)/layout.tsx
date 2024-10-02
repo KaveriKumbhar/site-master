@@ -1,7 +1,4 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import React from "react";
-
-import { dark } from "@clerk/themes";
 
 type Props = {};
 
@@ -11,6 +8,6 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div>{children}</div>
+    <div className="h-full flex flex-col items-center justify-center">{children}</div>
   );
 }

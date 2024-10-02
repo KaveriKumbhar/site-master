@@ -3,6 +3,7 @@
 import { EditorBtns } from "@/lib/constants";
 import { EditorAction } from "./editor-actions";
 import { createContext, Dispatch, useContext, useReducer } from "react";
+import { FunnelPage } from "@prisma/client";
 
 // ----------------------------- TYPES -----------------------------------
 
@@ -16,7 +17,12 @@ export type EditorElement = {
   type: EditorBtns;
   content:
     | EditorElement[]
-    | { href?: string; backgroundImage?: string; innerText?: string };
+    | {
+        href?: string;
+        backgroundImage?: string;
+        innerText?: string;
+        src?: string;
+      };
 };
 
 export type UserInfo = {
@@ -170,6 +176,42 @@ const deleteAnElement = (
   });
 };
 
+const reorderElements = (
+  editorArray: EditorElement[],
+  sourceId: string,
+  targetId: string
+): EditorElement[] => {
+  let movedElement: EditorElement | null = null;
+
+  const updatedArray = editorArray.filter((item) => {
+    if (item.id === sourceId) {
+      movedElement = item;
+      return false;
+    }
+
+    if (Array.isArray(item.content)) {
+      item.content = reorderElements(
+        item.content as EditorElement[],
+        sourceId,
+        targetId
+      );
+    }
+
+    return true;
+  });
+
+  return updatedArray.map((item) => {
+    if (movedElement && item.id === targetId && Array.isArray(item.content)) {
+      return {
+        ...item,
+        content: [...(item.content as EditorElement[]), movedElement],
+      };
+    }
+
+    return item;
+  });
+};
+
 // Function to handle each type action we want to be performed on EDITOR
 
 const editorReducer = (
@@ -264,6 +306,19 @@ const editorReducer = (
       };
 
       return deletedState;
+
+    case "REORDER_ELEMENTS":
+      return {
+        ...state,
+        editor: {
+          ...state.editor,
+          elements: reorderElements(
+            state.editor.elements,
+            action.payload.sourceId,
+            action.payload.targetId
+          ),
+        },
+      };
 
     case "CHANGE_CLICKED_ELEMENT":
       const newSelectedElement =
@@ -471,13 +526,13 @@ export const EditorContext = createContext<{
   dispatch: Dispatch<EditorAction>;
   subaccountId: string;
   funnelId: string;
-  // pageDetails: FunnelPage | null  // Prisma Client
+  pageDetails: FunnelPage | null; // Prisma Client
 }>({
   state: initialState,
   dispatch: () => undefined,
   subaccountId: "",
   funnelId: "",
-  // pageDetails: null,
+  pageDetails: null,
 });
 
 // create a custom hook named as "useEditor" to use the context
@@ -486,7 +541,7 @@ type EditorProps = {
   children: React.ReactNode;
   subaccountId: string;
   funnelId: string;
-  // pageDetails: FunnelPage
+  pageDetails: FunnelPage;
 };
 
 const EditorProvider = (props: EditorProps) => {
@@ -499,7 +554,7 @@ const EditorProvider = (props: EditorProps) => {
         dispatch,
         subaccountId: props.subaccountId,
         funnelId: props.funnelId,
-        // pageDetails: props.pageDetails,
+        pageDetails: props.pageDetails,
       }}
     >
       {props.children}

@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       "api-key": process.env.MONGO_API_KEY as string,
       "Access-Control-Request-Headers": "*",
     };
-
+ 
     // Send the POST request to MongoDB API
     const response = await fetch((MONGODB_API_URL + operation), {
       method: "POST",
