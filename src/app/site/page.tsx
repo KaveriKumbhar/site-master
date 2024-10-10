@@ -49,6 +49,7 @@ export default function Home() {
             </AnimatedGradientText>
           </div>
 
+
           {/* Image Section */}
           <div className="relative mt-2 md:mt-[-20px] flex justify-center items-center w-full max-w-screen-lg">
             <Image
