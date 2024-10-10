@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
@@ -38,7 +38,7 @@ const FunnelEditorNavigation = ({
   funnelId,
   funnelPageDetails = {
     id: "1",
-    name: "name",
+    name: "Name",
     pathName: "location",
     updatedAt: new Date(),
     createdAt: new Date(),
@@ -52,15 +52,6 @@ const FunnelEditorNavigation = ({
 }: Props) => {
   const router = useRouter();
   const { state, dispatch } = useEditor();
-
-  /// This will raise an infinite call loop error
-
-  // useEffect(() => {
-  //   dispatch({
-  //     type: "SET_FUNNELPAGE_ID",
-  //     payload: { funnelPageId: funnelPageDetails.id },
-  //   });
-  // }, [funnelPageDetails]);
 
   const handleOnBlurTitleChange: FocusEventHandler<HTMLInputElement> = async (
     event
@@ -129,24 +120,24 @@ const FunnelEditorNavigation = ({
   };
 
   return (
-    <TooltipProvider>
+    <div>
       <nav
         className={clsx(
-          "border-b-[1px] flex items-center justify-between p-6 gap-2 transition-all",
+          "border-b flex items-center justify-between p-6 gap-2 transition-all bg-blue-50 dark:bg-gray-900 shadow-lg rounded-lg",
           { "!h-0 !p-0 !overflow-hidden": state.editor.previewMode }
         )}
       >
         <aside className="flex items-center gap-4 max-w-[260px] w-[300px]">
           <Link href={`/subaccount/${subaccountId}/funnels/${funnelId}`}>
-            <ArrowLeftCircle />
+            <ArrowLeftCircle className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors" />
           </Link>
           <div className="flex flex-col w-full">
             <Input
               defaultValue={funnelPageDetails.name}
-              className="border-none h-5 m-0 p-0 text-lg"
+              className="border-none h-5 m-0 p-0 text-lg bg-transparent focus:outline-none text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-300"
               onBlur={handleOnBlurTitleChange}
             />
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-gray-500 dark:text-gray-400">
               Path: /{funnelPageDetails.pathName}
             </span>
           </div>
@@ -163,89 +154,80 @@ const FunnelEditorNavigation = ({
               });
             }}
           >
-            <TabsList className="grid w-full grid-cols-3 bg-transparent h-fit">
-              <Tooltip>
-                {/* <TooltipTrigger> */}
-                <TabsTrigger
-                  value="Desktop"
-                  className="data-[state=active]:bg-muted w-10 h-10 p-0"
-                >
-                  <Laptop />
-                </TabsTrigger>
-                {/* </TooltipTrigger> */}
-                {/* <TooltipContent>
-                  <p>Desktop</p>
-                </TooltipContent> */}
-              </Tooltip>
-              <Tooltip>
-                <TabsTrigger
-                  value="Tablet"
-                  className="w-10 h-10 p-0 data-[state=active]:bg-muted"
-                >
-                  <Tablet />
-                </TabsTrigger>
-                <TooltipContent>
-                  <p>Tablet</p>
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TabsTrigger
-                  value="Mobile"
-                  className="w-10 h-10 p-0 data-[state=active]:bg-muted"
-                >
-                  <Smartphone />
-                </TabsTrigger>
-                <TooltipContent>
-                  <p>Mobile</p>
-                </TooltipContent>
-              </Tooltip>
+            <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-800 rounded-lg h-fit">
+              
+                  <TabsTrigger
+                    value="Desktop"
+                    className="w-10 h-10 p-0 data-[state=active]:bg-gray-300 dark:data-[state=active]:bg-gray-700 rounded transition-all"
+                  >
+                    <Laptop className="text-gray-600 dark:text-gray-300" />
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="Tablet"
+                    className="w-10 h-10 p-0 data-[state=active]:bg-gray-300 dark:data-[state=active]:bg-gray-700 rounded transition-all"
+                  >
+                    <Tablet className="text-gray-600 dark:text-gray-300" />
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="Mobile"
+                    className="w-10 h-10 p-0 data-[state=active]:bg-gray-300 dark:data-[state=active]:bg-gray-700 rounded transition-all"
+                  >
+                    <Smartphone className="text-gray-600 dark:text-gray-300" />
+                  </TabsTrigger>
             </TabsList>
           </Tabs>
         </aside>
-        <aside className="flex items-center gap-2">
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            className="hover:bg-slate-800"
-            onClick={handlePreviewClick}
-          >
-            <EyeIcon />
-          </Button>
-          <Button
-            disabled={!(state.history.currentIdx > 0)}
-            onClick={handleUndo}
-            variant={"ghost"}
-            size={"icon"}
-            className="hover:bg-slate-800"
-          >
-            <Undo2 />
-          </Button>
-          <Button
-            disabled={
-              !(state.history.currentIdx < state.history.history.length - 1)
-            }
-            onClick={handleRedo}
-            variant={"ghost"}
-            size={"icon"}
-            className="hover:bg-slate-800 mr-4"
-          >
-            <Redo2 />
-          </Button>
+        <aside className="flex items-center gap-4">
+          
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-all rounded-lg"
+                onClick={handlePreviewClick}
+              >
+                <EyeIcon className="text-gray-600 dark:text-gray-300" />
+              </Button>
+              <Button
+                disabled={!(state.history.currentIdx > 0)}
+                onClick={handleUndo}
+                variant={"ghost"}
+                size={"icon"}
+                className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-all rounded-lg"
+              >
+                <Undo2 className="text-gray-600 dark:text-gray-300" />
+              </Button>
+              <Button
+                disabled={
+                  !(state.history.currentIdx < state.history.history.length - 1)
+                }
+                onClick={handleRedo}
+                variant={"ghost"}
+                size={"icon"}
+                className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-all rounded-lg mr-4"
+              >
+                <Redo2 className="text-gray-600 dark:text-gray-300" />
+              </Button>
           <div className="flex flex-col item-center mr-4">
             <div className="flex flex-row items-center gap-4">
-              Draft
+              <span className="text-gray-600 dark:text-gray-300">Draft</span>
               <Switch disabled defaultChecked={true} />
-              Publish
+              <span className="text-gray-600 dark:text-gray-300">Publish</span>
             </div>
-            <span className="text-muted-foreground text-sm">
-              Last updated :{" "}
-              {/* {funnelPageDetails.updatedAt.toLocaleDateString()} */}
+            <span className="text-gray-500 dark:text-gray-400 text-sm">
+             
+
+              Last updated: {funnelPageDetails.updatedAt.toLocaleDateString()}
             </span>
           </div>
-          <Button onClick={handleOnSave}>Save</Button>
+          <Button
+            onClick={handleOnSave}
+            className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-400 dark:hover:bg-blue-500 text-white dark:text-gray-900 transition-all rounded-lg shadow-lg"
+          >
+            Save
+          </Button>
         </aside>
       </nav>
-    </TooltipProvider>
+    </div>
   );
 };
 

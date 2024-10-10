@@ -32,9 +32,10 @@ const FunnelSidebar = ({ pageId, subaccountId }: Props) => {
         <SheetContent
           side={"right"}
           className={clsx(
-            "mt-[6.09rem] w-12 md:w-16 z-[60] shadow-none p-0 focus:border-none transition-all overflow-hidden ",
+            "mt-[6.09rem] w-12 md:w-16 z-[60] shadow-none bg-blue-100 dark:bg-slate-800 p-0 focus:border-none transition-all overflow-hidden",
             { hidden: state.editor.previewMode }
           )}
+          
         >
           {/* Keep it as it is or it will raise an error warning */}
           <SheetHeader className="text-left p-6">

@@ -65,6 +65,9 @@ B (255 */
     /* CSS: .bg-gradient { background: var(--gradient) } */
     --gradient: linear-gradient(to top left, #007adf, #00ecbc);
 
+    /* Radial gradient background from the provided HTML */
+    --radial-gradient: radial-gradient(125% 125% at 50% 10%, #000 40%, #63e 100%);
+
     --background: 220 65% 3.52%;
     --foreground: 220 10% 97.2%;
 
@@ -93,7 +96,16 @@ B (255 */
     --destructive-foreground: 220 10% 97.2%;
 
     --ring: 220 100% 44%;
-  }
+
+    /* Apply the radial gradient background and overlay effect */
+    background: var(--radial-gradient), var(--radial-gradient), var(--background);
+    background-position: bottom left, bottom right, center;
+    background-size: 500px 500px, 500px 500px, cover;
+    background-repeat: no-repeat;
+    position: relative;
+    color: var(--card-foreground); /* Adjust text color based on dark mode */
+}
+
 }
 
 @layer base {
@@ -127,15 +139,9 @@ B (255 */
 }
 
 /* Custom scrollbar styles */
-
-.no-scrollbar {
-  scrollbar-width: none;
-  overflow: scroll;
-}
-
 .custom-scrollbar {
-  scrollbar-width: thin; 
-  scrollbar-color: #003ecf transparent;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #003ecf transparent; /* Firefox */
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -155,3 +161,6 @@ B (255 */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Thumb color on hover */
 }
+
+
+/* --------------------------------- */
