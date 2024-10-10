@@ -3,10 +3,10 @@ import Navigation from '@/components/site/navigation'
 
 const Layout = ({ children }: {children: React.ReactNode}) => {
     return (
-        <div className="h-full">
+        <main className="h-full">
             <Navigation />
             { children }
-        </div>
+        </main>
     )
 }
 
