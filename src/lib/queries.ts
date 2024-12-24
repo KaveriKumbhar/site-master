@@ -405,7 +405,6 @@ export const updateUser = async (user: Partial<User>) => {
       role: user.role || 'SUBACCOUNT_USER',
     },
   })
-
   return response
 }
 

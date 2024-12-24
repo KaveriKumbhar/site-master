@@ -2,8 +2,12 @@ import React from "react";
 
 type Props = {};
 
-function loading({}: Props) {
-  return <div>loading</div>;
+function Loading({}: Props) {
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <img src="/assets/loading.gif" alt="Loading..." className="w-20 h-20" />
+    </div>
+  );
 }
 
-export default loading;
+export default Loading;

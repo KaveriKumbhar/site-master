@@ -1,9 +1,11 @@
+// import InfoBar from "@/components/global/infobar";
 // import Unauthorized from "@/components/unauthorized";
 // import { getNotificationAndUser, verifyAndAcceptInvitation } from "@/lib/queries";
 // import { currentUser } from "@clerk/nextjs/server";
 // import { Sidebar } from "lucide-react";
 // import { redirect } from "next/navigation";
 // import React from "react";
+// import BlurPage from '@/components/global/blur-page'
 
 // type Props = {
 //     children : React.ReactNode
@@ -32,13 +34,23 @@
 //     const notification = await getNotificationAndUser(agencyId)
 //     if(notification) allNoti = notification;
 
-//     return <div className="h-screen overflow-hidden">
+//     return (
+//     <div className="h-screen overflow-hidden">
 //         <Sidebar
 //             id={params.agencyId}
 //             type="agency"
 //         />
-//         <div className="md:pl-[300px]">{children}</div>
+//         <div className="md:pl-[300px]">
+//           <InfoBar
+//             notifications={allNoti}
+//             role={allNoti.User?.role}
+//           />
+//           <div className="relative">
+//             <BlurPage>{children}</BlurPage>
+//           </div>
+//         </div>
 //     </div>
+//   )
 // }
 
 // export default layout
@@ -83,7 +95,7 @@ const layout = async ({ children, params }: Props) => {
   if (notifications) allNoti = notifications
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen w-full overflow-hidden">
       <Sidebar
         id={params.agencyId}
         type="agency"
@@ -93,7 +105,7 @@ const layout = async ({ children, params }: Props) => {
           notifications={allNoti}
           role={allNoti.User?.role}
         />
-        <div className="relative">
+        <div className="relative w-full">
           <BlurPage>{children}</BlurPage>
         </div>
       </div>
