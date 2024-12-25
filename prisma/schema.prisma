@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("PROD_DATABASE_URL")
 }
 
 // model User {
@@ -139,72 +139,73 @@ model SubAccount {
   Trigger          Trigger[]
   Automation       Automation[]
   Pipeline         Pipeline[]
-  Tags             Tag[]
+  // Tags             Tag[]
   Notification     Notification[]
 
   @@index([agencyId])
 }
 
-model Tag {
-  id           String   @id @default(uuid())
-  name         String
-  color        String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  subAccountId String
+// model Tag {
+//   id           String   @id @default(uuid())
+//   name         String
+//   color        String
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
+//   subAccountId String
 
-  SubAccount SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  Ticket     Ticket[]
+//   SubAccount SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+//   Ticket     Ticket[]
 
-  @@index([subAccountId])
-}
+//   @@index([subAccountId])
+// }
 
-model Pipeline {
-  id           String     @id @default(uuid())
-  name         String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  Lane         Lane[]
-  SubAccount   SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  subAccountId String
+model Ticket {
+     id              String           @id @default(uuid())
+     laneId         String?
+     name            String           
+     createdAt       DateTime        @default(now())
+     updatedAt       DateTime        @updatedAt 
 
-  @@index([subAccountId])
+     description     String?        
+     assignedUserId String?        
+     
+     Assigned      User?            @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
+
+     status         String           // "todo" | "in-progress" | "done"
+     priority       String           // "low" | "medium" | "high"
+     dueDate        DateTime?       
+     order          Int              @default(0)
+     
+     Tags           String[]         // Array of tags as strings
+     Lane           Lane?            @relation(fields: [laneId], references: [id], onDelete: SetNull)
+     Contact        Contact?         @relation(fields: [contactId], references: [id], onDelete: Cascade)
+     contactId      String?
+
+     @@index([assignedUserId])
 }
 
 model Lane {
-  id         String   @id @default(uuid())
-  name       String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  Pipeline   Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
-  pipelineId String
-  Tickets    Ticket[]
-  order      Int      @default(0)
+    id              String           @id @default(uuid())
+    title           String           
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt 
+     order          Int              @default(0)
+    
+    PipelineId      String          
+    Pipeline        Pipeline        @relation(fields: [PipelineId], references: [id], onDelete: Cascade)
 
-  @@index([pipelineId])
+    Tasks           Ticket[]        
 }
 
-model Ticket {
-  id          String   @id @default(uuid())
-  name        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  laneId      String
-  order       Int      @default(0)
-  Lane        Lane     @relation(fields: [laneId], references: [id], onDelete: Cascade)
-  value       Decimal?
-  description String?
-  Tags        Tag[]
+model Pipeline {
+    id              String           @id @default(uuid())
+    name            String           
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt 
 
-  customerId String?
-  Customer   Contact? @relation(fields: [customerId], references: [id], onDelete: SetNull)
-
-  assignedUserId String?
-  Assigned       User?   @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
-
-  @@index([laneId])
-  @@index([customerId])
-  @@index([assignedUserId])
+    Lanes           Lane[]
+    subAccountId    String
+    SubAccount      SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
 }
 
 enum TriggerTypes {

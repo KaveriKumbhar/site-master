@@ -105,6 +105,24 @@ B (255 */
   }
 }
 
+/* scrollable but with blue scrollbar and no background for scroll bar */
+.no-scrollBar::-webkit-scrollbar {
+  overflow-x: scroll;
+  width: 0px;
+  background: transparent;
+}
+
+/* .no-scrollBar {
+  scrollbar-width: "none";
+  scrollbar-color: var(--primary) var(--background);
+
+} */
+
+.bg-grid-pattern {
+  background-image: radial-gradient(circle, #3f3f3f 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
 .dotPattern {
   background-image: radial-gradient(rgb(35, 40, 68) 1px, transparent 1px);
   background-size: 25px 25px;

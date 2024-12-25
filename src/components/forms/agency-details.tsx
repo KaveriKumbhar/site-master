@@ -1,11 +1,514 @@
-'use client'
-import { Agency } from '@prisma/client'
-import { useForm } from 'react-hook-form'
-import React, { useEffect, useState } from 'react'
-import { NumberInput } from '@tremor/react'
-import { v4 } from 'uuid'
+// 'use client'
+// import { Agency } from '@prisma/client'
+// import { useForm } from 'react-hook-form'
+// import React, { useEffect, useState } from 'react'
+// import { NumberInput } from '@tremor/react'
+// import { v4 } from 'uuid'
 
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
+// import {
+//   AlertDialog,
+//   AlertDialogAction,
+//   AlertDialogCancel,
+//   AlertDialogContent,
+//   AlertDialogDescription,
+//   AlertDialogFooter,
+//   AlertDialogHeader,
+//   AlertDialogTitle,
+//   AlertDialogTrigger,
+// } from '../ui/alert-dialog'
+// import { zodResolver } from '@hookform/resolvers/zod'
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from '../ui/card'
+// import {
+//   Form,
+//   FormControl,
+//   FormDescription,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormMessage,
+// } from '../ui/form'
+// import { useToast } from '../ui/use-toast'
+
+// import * as z from 'zod'
+// import FileUpload from '../global/file-upload'
+// import { Input } from '../ui/input'
+// import { Switch } from '../ui/switch'
+// import {
+//   deleteAgency,
+//   initUser,
+//   saveActivityLogsNotification,
+//   updateAgencyDetails,
+//   upsertAgency,
+// } from '@/lib/queries'
+// import { Button } from '../ui/button'
+// import Loading from '../../app/(main)/agency/loading'
+
+// type Props = {
+//   data?: Partial<Agency>
+//   customerId?: string;
+// }
+
+// const FormSchema = z.object({
+//   name: z.string().min(2, { message: 'Agency name must be atleast 2 chars.' }),
+//   companyEmail: z.string().min(1),
+//   companyPhone: z.string().min(1),
+//   whiteLabel: z.boolean(),
+//   address: z.string().min(1),
+//   city: z.string().min(1),
+//   zipCode: z.string().min(1),
+//   state: z.string().min(1),
+//   country: z.string().min(1),
+//   agencyLogo: z.string()
+// })
+
+// const AgencyDetails = ({ data }: Props) => {
+//   const { toast } = useToast()
+//   const router = useRouter()
+//   const [deletingAgency, setDeletingAgency] = useState(false)
+//   // const form = useForm<z.infer<typeof FormSchema>>({
+//   //   mode: 'onChange',
+//   //   resolver: zodResolver(FormSchema),
+//   //   defaultValues: {
+//   //     name: data?.name,
+//   //     companyEmail: data?.companyEmail,
+//   //     companyPhone: data?.companyPhone,
+//   //     whiteLabel: data?.whiteLabel || false,
+//   //     address: data?.address,
+//   //     city: data?.city,
+//   //     zipCode: data?.zipCode,
+//   //     state: data?.state,
+//   //     country: data?.country,
+//   //     agencyLogo: data?.agencyLogo,
+//   //   },
+//   // })
+
+//   const form = useForm<z.infer<typeof FormSchema>>({
+//     mode: 'onChange',
+//     resolver: zodResolver(FormSchema),
+//     defaultValues: {
+//       name: data?.name || '', // Provide default empty string if data is undefined
+//       companyEmail: data?.companyEmail || '',
+//       companyPhone: data?.companyPhone || '',
+//       whiteLabel: data?.whiteLabel || false,
+//       address: data?.address || '',
+//       city: data?.city || '',
+//       zipCode: data?.zipCode || '',
+//       state: data?.state || '',
+//       country: data?.country || '',
+//       agencyLogo: data?.agencyLogo || '',
+//     },
+//   });
+
+//   const isLoading = form.formState.isSubmitting
+
+//   useEffect(() => {
+//     if (data) {
+//       form.reset(data)
+//     }
+//   }, [data, form])
+
+//   const handleSubmit = async (values: z.infer<typeof FormSchema>) => {
+//     try {
+//       let newUserData
+//       let custId
+//       if (!data?.id) {
+//         const bodyData = {
+//           email: values.companyEmail,
+//           name: values.name,
+//           shipping: {
+//             address: {
+//               city: values.city,
+//               country: values.country,
+//               line1: values.address,
+//               postal_code: values.zipCode,
+//               state: values.zipCode,
+//             },
+//             name: values.name,
+//           },
+//           address: {
+//             city: values.city,
+//             country: values.country,
+//             line1: values.address,
+//             postal_code: values.zipCode,
+//             state: values.zipCode,
+//           },
+//         }
+
+//         const customerResponse = await fetch('/api/stripe/create-customer', {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json',
+//           },
+//           body: JSON.stringify(bodyData),
+//         })
+//         const customerData: { customerId: string } =
+//           await customerResponse.json()
+//         custId = customerData.customerId
+//       }
+
+//       newUserData = await initUser({ role: 'AGENCY_OWNER' })
+//       if (!data?.id) return
+
+//       const response = await upsertAgency({
+//         id: data?.id ? data.id : v4(),
+//         address: values.address,
+//         city: values.city,
+//         agencyLogo: values.agencyLogo,
+//         companyPhone: values.companyPhone,
+//         country: values.country,
+//         name: values.name,
+//         state: values.state,
+//         whiteLabel: values.whiteLabel,
+//         zipCode: values.zipCode,
+//         createdAt: new Date(),
+//         updatedAt: new Date(),
+//         companyEmail: values.companyEmail,
+//         connectAccountId: '',
+//         goal: 5,
+//         customerId: ''
+//         //customerId: custId || '',
+//       })
+//       toast({
+//         title: 'Created Agency',
+//       })
+//       if (data?.id) return router.refresh()
+//       if (response) {
+//         return router.refresh()
+//       }
+//       // if (response) {
+//       //   toast({ title: 'Agency created successfully' });
+//       //   router.refresh();
+//       // }
+//     } catch (error) {
+//       console.log(error)
+//       toast({
+//         variant: 'destructive',
+//         title: 'Oppse!',
+//         description: 'could not create your agency',
+//       })
+//     }
+//   }
+//   const handleDeleteAgency = async () => {
+//     if (!data?.id) return
+//     setDeletingAgency(true)
+//     //WIP: discontinue the subscription
+//     try {
+//       const response = await deleteAgency(data.id)
+//       toast({
+//         title: 'Deleted Agency',
+//         description: 'Deleted your agency and all subaccounts',
+//       })
+//       router.refresh()
+//     } catch (error) {
+//       console.log(error)
+//       toast({
+//         variant: 'destructive',
+//         title: 'Oppse!',
+//         description: 'could not delete your agency ',
+//       })
+//     }
+//     setDeletingAgency(false)
+//   }
+
+//   return (
+//     <AlertDialog>
+//       <Card className="w-full">
+//         <CardHeader>
+//           <CardTitle>Agency Information</CardTitle>
+//           <CardDescription>
+//             Lets create an agency for you business. You can edit agency settings
+//             later from the agency settings tab.
+//           </CardDescription>
+//         </CardHeader>
+//         <CardContent>
+//           <Form {...form}>
+//             <form
+//               onSubmit={form.handleSubmit(handleSubmit)}
+//               className="space-y-4"
+//             >
+//                <FormField
+//                 disabled={isLoading}
+//                 control={form.control}
+//                 name="agencyLogo"
+//                 render={({ field }) => (
+//                   <FormItem>
+//                     <FormLabel>Agency Logo</FormLabel>
+//                     <FormControl>
+//                       <FileUpload
+//                         apiEndpoint="agencyLogo"
+//                         onChange={field.onChange}
+//                         value={field.value}
+//                       />
+//                     </FormControl>
+//                     <FormMessage />
+//                   </FormItem>
+//                 )}
+//               />
+//               <div className="flex md:flex-row gap-4">
+//                 <FormField
+//                   disabled={isLoading}
+//                   control={form.control}
+//                   name="name"
+//                   render={({ field }) => (
+//                     <FormItem className="flex-1">
+//                       <FormLabel>Agency Name</FormLabel>
+//                       <FormControl>
+//                         <Input
+//                           placeholder="Your agency name"
+//                           {...field}
+//                         />
+//                       </FormControl>
+//                       <FormMessage />
+//                     </FormItem>
+//                   )}
+//                 />
+//                 <FormField
+//                   control={form.control}
+//                   name="companyEmail"
+//                   render={({ field }) => (
+//                     <FormItem className="flex-1">
+//                       <FormLabel>Agency Email</FormLabel>
+//                       <FormControl>
+//                         <Input
+//                           readOnly
+//                           placeholder="Email"
+//                           {...field}
+//                         />
+//                       </FormControl>
+//                       <FormMessage />
+//                     </FormItem>
+//                   )}
+//                 />
+//               </div>
+//               <div className="flex md:flex-row gap-4">
+//                 <FormField
+//                   disabled={isLoading}
+//                   control={form.control}
+//                   name="companyPhone"
+//                   render={({ field }) => (
+//                     <FormItem className="flex-1">
+//                       <FormLabel>Agency Phone Number</FormLabel>
+//                       <FormControl>
+//                         <Input
+//                           placeholder="Phone"
+//                           {...field}
+//                         />
+//                       </FormControl>
+//                       <FormMessage />
+//                     </FormItem>
+//                   )}
+//                 />
+//               </div>
+
+//               <FormField
+//                 disabled={isLoading}
+//                 control={form.control}
+//                 name="whiteLabel"
+//                 render={({ field }) => {
+//                   return (
+//                     <FormItem className="flex flex-row items-center justify-between rounded-lg border gap-4 p-4">
+//                       <div>
+//                         <FormLabel>Whitelabel Agency</FormLabel>
+//                         <FormDescription>
+//                           Turning on whilelabel mode will show your agency logo
+//                           to all sub accounts by default. You can overwrite this
+//                           functionality through sub account settings.
+//                         </FormDescription>
+//                       </div>
+
+//                       <FormControl>
+//                         <Switch
+//                           checked={field.value}
+//                           onCheckedChange={field.onChange}
+//                         />
+//                       </FormControl>
+//                     </FormItem>
+//                   )
+//                 }}
+//               />
+//               <FormField
+//                 disabled={isLoading}
+//                 control={form.control}
+//                 name="address"
+//                 render={({ field }) => (
+//                   <FormItem className="flex-1">
+//                     <FormLabel>Address</FormLabel>
+//                     <FormControl>
+//                       <Input
+//                         placeholder="123 st..."
+//                         {...field}
+//                       />
+//                     </FormControl>
+//                     <FormMessage />
+//                   </FormItem>
+//                 )}
+//               />
+//               <div className="flex md:flex-row gap-4">
+//                 <FormField
+//                   disabled={isLoading}
+//                   control={form.control}
+//                   name="city"
+//                   render={({ field }) => (
+//                     <FormItem className="flex-1">
+//                       <FormLabel>City</FormLabel>
+//                       <FormControl>
+//                         <Input
+//                           placeholder="City"
+//                           {...field}
+//                         />
+//                       </FormControl>
+//                       <FormMessage />
+//                     </FormItem>
+//                   )}
+//                 />
+//                 <FormField
+//                   disabled={isLoading}
+//                   control={form.control}
+//                   name="state"
+//                   render={({ field }) => (
+//                     <FormItem className="flex-1">
+//                       <FormLabel>State</FormLabel>
+//                       <FormControl>
+//                         <Input
+//                           placeholder="State"
+//                           {...field}
+//                         />
+//                       </FormControl>
+//                       <FormMessage />
+//                     </FormItem>
+//                   )}
+//                 />
+//                 <FormField
+//                   disabled={isLoading}
+//                   control={form.control}
+//                   name="zipCode"
+//                   render={({ field }) => (
+//                     <FormItem className="flex-1">
+//                       <FormLabel>Zipcpde</FormLabel>
+//                       <FormControl>
+//                         <Input
+//                           placeholder="Zipcode"
+//                           {...field}
+//                         />
+//                       </FormControl>
+//                       <FormMessage />
+//                     </FormItem>
+//                   )}
+//                 />
+//               </div>
+//               <FormField
+//                 disabled={isLoading}
+//                 control={form.control}
+//                 name="country"
+//                 render={({ field }) => (
+//                   <FormItem className="flex-1">
+//                     <FormLabel>Country</FormLabel>
+//                     <FormControl>
+//                       <Input
+//                         placeholder="Country"
+//                         {...field}
+//                       />
+//                     </FormControl>
+//                     <FormMessage />
+//                   </FormItem>
+//                 )}
+//               />
+//               {data?.id && (
+//                 <div className="flex flex-col gap-2">
+//                   <FormLabel>Create A Goal</FormLabel>
+//                   <FormDescription>
+//                     ✨ Create a goal for your agency. As your business grows
+//                     your goals grow too so dont forget to set the bar higher!
+//                   </FormDescription>
+//                   <NumberInput
+//                     defaultValue={data?.goal}
+//                     onValueChange={async (val) => {
+//                       if (!data?.id) return
+//                       await updateAgencyDetails(data.id, { goal: val })
+//                       await saveActivityLogsNotification({
+//                         agencyId: data.id,
+//                         description: `Updated the agency goal to | ${val} Sub Account`,
+//                         subaccountId: undefined,
+//                       })
+//                       router.refresh()
+//                     }}
+//                     min={1}
+//                     className="bg-background !border !border-input"
+//                     placeholder="Sub Account Goal"
+//                   />
+//                 </div>
+//               )}
+//               <Button
+//                 type="submit"
+//                 disabled={isLoading}
+//               >
+//                 {isLoading ? <Loading /> : 'Save Agency Information'}
+//               </Button>
+//             </form>
+//           </Form>
+
+//           {data?.id && (
+//             <div className="flex flex-row items-center justify-between rounded-lg border border-destructive gap-4 p-4 mt-4">
+//               <div>
+//                 <div>Danger Zone</div>
+//               </div>
+//               <div className="text-muted-foreground">
+//                 Deleting your agency cannpt be undone. This will also delete all
+//                 sub accounts and all data related to your sub accounts. Sub
+//                 accounts will no longer have access to funnels, contacts etc.
+//               </div>
+//               <AlertDialogTrigger
+//                 disabled={isLoading || deletingAgency}
+//                 className="text-red-600 p-2 text-center mt-2 rounded-md hove:bg-red-600 hover:text-white whitespace-nowrap"
+//               >
+//                 {deletingAgency ? 'Deleting...' : 'Delete Agency'}
+//               </AlertDialogTrigger>
+//             </div>
+//           )}
+//           <AlertDialogContent>
+//             <AlertDialogHeader>
+//               <AlertDialogTitle className="text-left">
+//                 Are you absolutely sure?
+//               </AlertDialogTitle>
+//               <AlertDialogDescription className="text-left">
+//                 This action cannot be undone. This will permanently delete the
+//                 Agency account and all related sub accounts.
+//               </AlertDialogDescription>
+//             </AlertDialogHeader>
+//             <AlertDialogFooter className="flex items-center">
+//               <AlertDialogCancel className="mb-2">Cancel</AlertDialogCancel>
+//               <AlertDialogAction
+//                 disabled={deletingAgency}
+//                 className="bg-destructive hover:bg-destructive"
+//                 onClick={handleDeleteAgency}
+//               >
+//                 Delete
+//               </AlertDialogAction>
+//             </AlertDialogFooter>
+//           </AlertDialogContent>
+//         </CardContent>
+//       </Card>
+//     </AlertDialog>
+//   )
+// }
+
+// export default AgencyDetails
+
+"use client";
+import { Agency } from "@prisma/client";
+import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { NumberInput } from "@tremor/react";
+import { v4 } from "uuid";
+
+import { useRouter } from "next/navigation";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,15 +519,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '../ui/alert-dialog'
-import { zodResolver } from '@hookform/resolvers/zod'
+} from "../ui/alert-dialog";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card'
+} from "../ui/card";
 import {
   Form,
   FormControl,
@@ -33,29 +536,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form'
-import { useToast } from '../ui/use-toast'
+} from "../ui/form";
+import { useToast } from "../ui/use-toast";
 
-import * as z from 'zod'
-import FileUpload from '../global/file-upload'
-import { Input } from '../ui/input'
-import { Switch } from '../ui/switch'
+import * as z from "zod";
+import FileUpload from "../global/file-upload";
+import { Input } from "../ui/input";
+import { Switch } from "../ui/switch";
 import {
   deleteAgency,
   initUser,
   saveActivityLogsNotification,
   updateAgencyDetails,
   upsertAgency,
-} from '@/lib/queries'
-import { Button } from '../ui/button'
-import Loading from '../../app/(main)/agency/loading'
+} from "@/lib/queries";
+import { Button } from "../ui/button";
+import Loading from "../../app/(main)/agency/loading";
 
 type Props = {
-  data?: Partial<Agency>
-}
+  data?: Partial<Agency>;
+};
 
 const FormSchema = z.object({
-  name: z.string().min(2, { message: 'Agency name must be atleast 2 chars.' }),
+  name: z.string().min(2, { message: "Agency name must be atleast 2 chars." }),
   companyEmail: z.string().min(1),
   companyPhone: z.string().min(1),
   whiteLabel: z.boolean(),
@@ -65,14 +568,14 @@ const FormSchema = z.object({
   state: z.string().min(1),
   country: z.string().min(1),
   agencyLogo: z.string().min(1),
-})
+});
 
 const AgencyDetails = ({ data }: Props) => {
-  const { toast } = useToast()
-  const router = useRouter()
-  const [deletingAgency, setDeletingAgency] = useState(false)
+  const { toast } = useToast();
+  const router = useRouter();
+  const [deletingAgency, setDeletingAgency] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
-    mode: 'onChange',
+    mode: "onChange",
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: data?.name,
@@ -86,19 +589,19 @@ const AgencyDetails = ({ data }: Props) => {
       country: data?.country,
       agencyLogo: data?.agencyLogo,
     },
-  })
-  const isLoading = form.formState.isSubmitting
+  });
+  const isLoading = form.formState.isSubmitting;
 
   useEffect(() => {
     if (data) {
-      form.reset(data)
+      form.reset(data);
     }
-  }, [data])
+  }, [data]);
 
   const handleSubmit = async (values: z.infer<typeof FormSchema>) => {
     try {
-      let newUserData
-      let custId
+      let newUserData;
+      let custId;
       if (!data?.id) {
         const bodyData = {
           email: values.companyEmail,
@@ -120,26 +623,26 @@ const AgencyDetails = ({ data }: Props) => {
             postal_code: values.zipCode,
             state: values.zipCode,
           },
-        }
+        };
 
-        const customerResponse = await fetch('/api/stripe/create-customer', {
-          method: 'POST',
+        const customerResponse = await fetch("/api/stripe/create-customer", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(bodyData),
-        })
+        });
         const customerData: { customerId: string } =
-          await customerResponse.json()
-        custId = customerData.customerId
+          await customerResponse.json();
+        custId = customerData.customerId;
       }
 
-      newUserData = await initUser({ role: 'AGENCY_OWNER' })
-      if (!data?.customerId && !custId) return
+      newUserData = await initUser({ role: "AGENCY_OWNER" });
+      if (!data?.customerId && !custId) return;
 
       const response = await upsertAgency({
         id: data?.id ? data.id : v4(),
-        customerId: data?.customerId || custId || '',
+        customerId: data?.customerId || custId || "",
         address: values.address,
         agencyLogo: values.agencyLogo,
         city: values.city,
@@ -152,60 +655,63 @@ const AgencyDetails = ({ data }: Props) => {
         createdAt: new Date(),
         updatedAt: new Date(),
         companyEmail: values.companyEmail,
-        connectAccountId: '',
+        connectAccountId: "",
         goal: 5,
-      })
+      });
       toast({
-        title: 'Created Agency',
-      })
-      if (data?.id) return router.refresh()
+        title: "Created Agency",
+      });
+      if (data?.id) return router.refresh();
       if (response) {
-        return router.refresh()
+        return router.refresh();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast({
-        variant: 'destructive',
-        title: 'Oops!',
-        description: 'could not create your agency',
-      })
+        variant: "destructive",
+        title: "Oppse!",
+        description: "could not create your agency",
+      });
     }
-  }
+  };
   const handleDeleteAgency = async () => {
-    if (!data?.id) return
-    setDeletingAgency(true)
+    if (!data?.id) return;
+    setDeletingAgency(true);
     //WIP: discontinue the subscription
     try {
-      const response = await deleteAgency(data.id)
+      const response = await deleteAgency(data.id);
       toast({
-        title: 'Deleted Agency',
-        description: 'Deleted your agency and all subaccounts',
-      })
-      router.refresh()
+        title: "Deleted Agency",
+        description: "Deleted your agency and all subaccounts",
+      });
+      router.refresh();
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast({
-        variant: 'destructive',
-        title: 'Oops!',
-        description: 'could not delete your agency ',
-      })
+        variant: "destructive",
+        title: "Oppse!",
+        description: "could not delete your agency ",
+      });
     }
-    setDeletingAgency(false)
-  }
+    setDeletingAgency(false);
+  };
 
   return (
     <AlertDialog>
-      <Card className="w-full" style={{ backgroundColor: '#e3f2fd' }}>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Agency Information</CardTitle>
           <CardDescription>
-            Let's create an agency for your business. You can edit agency settings
+            Lets create an agency for you business. You can edit agency settings
             later from the agency settings tab.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-4"
+            >
               <FormField
                 disabled={isLoading}
                 control={form.control}
@@ -231,13 +737,9 @@ const AgencyDetails = ({ data }: Props) => {
                   name="name"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel style={{ color: '#000000' }}>Agency Name</FormLabel>
+                      <FormLabel>Agency Name</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Your agency name"
-                          {...field}
-                          className="border-black transition duration-300 ease-in-out focus:border-blue-500"
-                        />
+                        <Input placeholder="Your agency name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -248,14 +750,9 @@ const AgencyDetails = ({ data }: Props) => {
                   name="companyEmail"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel style={{ color: '#000000' }}>Agency Email</FormLabel>
+                      <FormLabel>Agency Email</FormLabel>
                       <FormControl>
-                        <Input
-                          readOnly
-                          placeholder="Email"
-                          {...field}
-                          className="border-black transition duration-300 ease-in-out focus:border-blue-500"
-                        />
+                        <Input readOnly placeholder="Email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -269,13 +766,9 @@ const AgencyDetails = ({ data }: Props) => {
                   name="companyPhone"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel style={{ color: '#000000' }}>Agency Phone Number</FormLabel>
+                      <FormLabel>Agency Phone Number</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Phone"
-                          {...field}
-                          className="border-black transition duration-300 ease-in-out focus:border-blue-500"
-                        />
+                        <Input placeholder="Phone" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -293,10 +786,12 @@ const AgencyDetails = ({ data }: Props) => {
                       <div>
                         <FormLabel>Whitelabel Agency</FormLabel>
                         <FormDescription>
-                          Turning on white-label mode will show your agency logo
-                          to all users in your workspace
+                          Turning on whilelabel mode will show your agency logo
+                          to all sub accounts by default. You can overwrite this
+                          functionality through sub account settings.
                         </FormDescription>
                       </div>
+
                       <FormControl>
                         <Switch
                           checked={field.value}
@@ -304,41 +799,33 @@ const AgencyDetails = ({ data }: Props) => {
                         />
                       </FormControl>
                     </FormItem>
-                  )
+                  );
                 }}
               />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  disabled={isLoading}
-                  control={form.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Address"
-                          {...field}
-                          className="border-black transition duration-300 ease-in-out focus:border-blue-500"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <FormField
+                disabled={isLoading}
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input placeholder="123 st..." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex md:flex-row gap-4">
                 <FormField
                   disabled={isLoading}
                   control={form.control}
                   name="city"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex-1">
                       <FormLabel>City</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="City"
-                          {...field}
-                          className="border-black transition duration-300 ease-in-out focus:border-blue-500"
-                        />
+                        <Input placeholder="City" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -349,14 +836,10 @@ const AgencyDetails = ({ data }: Props) => {
                   control={form.control}
                   name="state"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex-1">
                       <FormLabel>State</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="State"
-                          {...field}
-                          className="border-black transition duration-300 ease-in-out focus:border-blue-500"
-                        />
+                        <Input placeholder="State" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -367,80 +850,104 @@ const AgencyDetails = ({ data }: Props) => {
                   control={form.control}
                   name="zipCode"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Zip Code</FormLabel>
+                    <FormItem className="flex-1">
+                      <FormLabel>Zipcpde</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Zip Code"
-                          {...field}
-                          className="border-black transition duration-300 ease-in-out focus:border-blue-500"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  disabled={isLoading}
-                  control={form.control}
-                  name="country"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Country</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Country"
-                          {...field}
-                          className="border-black transition duration-300 ease-in-out focus:border-blue-500"
-                        />
+                        <Input placeholder="Zipcode" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-
-              <Button
+              <FormField
                 disabled={isLoading}
-                type="submit"
-                className="w-full bg-black text-white transition duration-300 ease-in-out transform hover:scale-105 hover:bg-blue-700"
-              >
-                {isLoading ? <Loading /> : 'Save Agency'}
+                control={form.control}
+                name="country"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Country</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Country" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {data?.id && (
+                <div className="flex flex-col gap-2">
+                  <FormLabel>Create A Goal</FormLabel>
+                  <FormDescription>
+                    ✨ Create a goal for your agency. As your business grows
+                    your goals grow too so dont forget to set the bar higher!
+                  </FormDescription>
+                  <NumberInput
+                    defaultValue={data?.goal}
+                    onValueChange={async (val) => {
+                      if (!data?.id) return;
+                      await updateAgencyDetails(data.id, { goal: val });
+                      await saveActivityLogsNotification({
+                        agencyId: data.id,
+                        description: `Updated the agency goal to | ${val} Sub Account`,
+                        subaccountId: undefined,
+                      });
+                      router.refresh();
+                    }}
+                    min={1}
+                    className="bg-background !border !border-input"
+                    placeholder="Sub Account Goal"
+                  />
+                </div>
+              )}
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? <Loading /> : "Save Agency Information"}
               </Button>
             </form>
           </Form>
+
+          {data?.id && (
+            <div className="flex flex-row items-center justify-between rounded-lg border border-destructive gap-4 p-4 mt-4">
+              <div>
+                <div>Danger Zone</div>
+              </div>
+              <div className="text-muted-foreground">
+                Deleting your agency cannpt be undone. This will also delete all
+                sub accounts and all data related to your sub accounts. Sub
+                accounts will no longer have access to funnels, contacts etc.
+              </div>
+              <AlertDialogTrigger
+                disabled={isLoading || deletingAgency}
+                className="text-red-600 p-2 text-center mt-2 rounded-md hove:bg-red-600 hover:text-white whitespace-nowrap"
+              >
+                {deletingAgency ? "Deleting..." : "Delete Agency"}
+              </AlertDialogTrigger>
+            </div>
+          )}
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-left">
+                Are you absolutely sure?
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-left">
+                This action cannot be undone. This will permanently delete the
+                Agency account and all related sub accounts.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex items-center">
+              <AlertDialogCancel className="mb-2">Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                disabled={deletingAgency}
+                className="bg-destructive hover:bg-destructive"
+                onClick={handleDeleteAgency}
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
         </CardContent>
       </Card>
-      {data?.id && (
-        <AlertDialogTrigger asChild>
-          <Button
-            variant="destructive"
-            className="w-full bg-red-500 text-white transition duration-300 ease-in-out transform hover:scale-105 hover:bg-red-700"
-          >
-            {deletingAgency ? <Loading /> : 'Delete Agency'}
-          </Button>
-        </AlertDialogTrigger>
-      )}
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your agency
-            and remove all sub-accounts and users.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleDeleteAgency}
-            className="bg-red-500 text-white transition duration-300 ease-in-out transform hover:scale-105 hover:bg-red-700"
-          >
-            {deletingAgency ? <Loading /> : 'Delete Agency'}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
     </AlertDialog>
-  )
-}
+  );
+};
 
-export default AgencyDetails
+export default AgencyDetails;

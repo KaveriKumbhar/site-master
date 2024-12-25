@@ -7,6 +7,7 @@ import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import ModalProvider from "@/providers/modal-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,9 +32,11 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              {children}
-              <Toaster />
-              <SonnerToaster />
+              <ModalProvider>
+                {children}
+                <Toaster />
+                <SonnerToaster position="bottom-left" />
+              </ModalProvider>
             </ThemeProvider>
           </TooltipProvider>
         </ClerkProvider>
