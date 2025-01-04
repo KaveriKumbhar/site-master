@@ -20,7 +20,7 @@ type Props = {
 const MediaComponent = ({ data, subaccountId }: Props) => {
   return (
     <div className="flex flex-col gap-4 h-full w-full">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center space-x-10">
         <h1 className="text-4xl">Media Bucket</h1>
         <MediaUploadButton subaccountId={subaccountId} />
       </div>
