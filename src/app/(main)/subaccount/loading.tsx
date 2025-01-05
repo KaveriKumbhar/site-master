@@ -1,9 +1,13 @@
 import React from "react";
+import Loading from "../agency/loading";
 
 type Props = {};
 
-const loading = (props: Props) => {
-  return <div>loading</div>;
+const loadingAgencyPage = (props: Props) => {
+  return 
+  (<div className="h-screen w-screen flex justify-center items-center">
+     <Loading></Loading>
+  </div>)
 };
 
-export default loading;
+export default loadingAgencyPage;
