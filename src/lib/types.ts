@@ -1,5 +1,6 @@
 import {
   Contact,
+  Lane,
   Notification,
   Prisma,
   Role,
@@ -69,36 +70,15 @@ export type GetMediaFiles = Prisma.PromiseReturnType<typeof getMedia>;
 
 export type CreateMediaType = Prisma.MediaCreateWithoutSubaccountInput;
 
-export interface Project {
-  id: string;
-  name: string;
-  dateAdded: string;
-  deadline: string;
-  participants: string[];
-  description: string;
-  totalTasks: number;
-  doneTasks: number;
-  frozenTasks: number;
-}
+export type TicketAndTags = Ticket & {
+  Tags: Tag[];
+  Assigned: User | null;
+  Customer: Contact | null;
+};
 
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  status: "todo" | "in-progress" | "done";
-  priority: "low" | "medium" | "high";
-  dueDate: string;
-  assignee: string;
-  tags: string[];
-}
-
-export interface Lane {
-  id: string;
-  title: string;
-  tasks: Task[];
-}
-
-export type LaneDetail = Lane;
+export type LaneDetail = Lane & {
+  Tickets: TicketAndTags[];
+};
 
 export const CreatePipelineFormSchema = z.object({
   name: z.string().min(1),

@@ -30,14 +30,14 @@
 //         const allPermissions = await getAuthUserDetails();
 //         const hasPermission = allPermissions?.Permissions.find(
 //             (permissions)=>
-//                 permissions.access && permissions.subAccountId===params.subaccountId 
+//                 permissions.access && permissions.subAccountId===params.subaccountId
 //         );
 //         if(!hasPermission){
 //             return <Unauthorized/>
 //         }
 
 //         const allNotifications = await getNotificationAndUser(
-//             agencyId 
+//             agencyId
 //         );
 
 //         if(
@@ -64,9 +64,9 @@
 //                 />
 //                 <div className="relative">{children}</div>
 //             </div>
-           
+
 //         </div>
-       
+
 //     )
 // }
 
@@ -128,10 +128,10 @@ const SubaccountLayout = async ({ children, params }: Props) => {
   }
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen w-full overflow-hidden">
       <Sidebar id={params.subaccountId} type="subaccount" />
 
-      <div className="md:pl-[300px]">
+      <div className="md:pl-[300px] mt-[10vh]">
         <InfoBar
           notifications={notifications}
           role={user.privateMetadata.role as Role}
