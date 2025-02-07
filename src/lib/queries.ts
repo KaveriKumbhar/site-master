@@ -198,6 +198,7 @@ export const verifyAndAcceptInvitation = async () => {
       role: invitationExists.role,
       createdAt: new Date(),
       updatedAt: new Date(),
+      subaccountId: null
     });
     console.log("got user Details");
     await saveActivityLogsNotification({
