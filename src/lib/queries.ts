@@ -40,7 +40,7 @@ export const getAgencyId = async () => {
 
   console.log("agencyId", userData?.agencyId);
 
-  return userData;
+  return userData?.agencyId;
 };
 
 export const getAuthUserDetails = async () => {
@@ -371,7 +371,7 @@ export const upsertSubAccount = async (subAccount: SubAccount) => {
           id: permissionId,
         },
       },
-      Pipeline: {
+      pipelines: {
         create: { name: "Lead Cycle" },
       },
       SidebarOption: {
@@ -396,11 +396,11 @@ export const upsertSubAccount = async (subAccount: SubAccount) => {
             icon: "database",
             link: `/subaccount/${subAccount.id}/media`,
           },
-          {
-            name: "Automations",
-            icon: "chip",
-            link: `/subaccount/${subAccount.id}/automations`,
-          },
+          // {
+          //   name: "Automations",
+          //   icon: "chip",
+          //   link: `/subaccount/${subAccount.id}/automations`,
+          // },
           {
             name: "Pipelines",
             icon: "flag",
@@ -512,9 +512,13 @@ export const sendInvitation = async (
   email: string,
   agencyId: string
 ) => {
+  console.log("entered");
+
   const resposne = await db.invitation.create({
     data: { email, agencyId, role },
   });
+
+  console.log("response", resposne);
 
   try {
     const invitation = await clerkClient.invitations.createInvitation({
@@ -603,8 +607,11 @@ export const getLanesWithTicketAndTags = async (pipelineId: string) => {
 export const upsertFunnel = async (
   subaccountId: string,
   funnel: z.infer<typeof CreateFunnelFormSchema> & { liveProducts: string },
-  funnelId: string
+  funnelId: string,
+  agencyId: string
 ) => {
+  let Id = await getAgencyId();
+
   const response = await db.funnel.upsert({
     where: { id: funnelId },
     update: funnel,
@@ -612,6 +619,7 @@ export const upsertFunnel = async (
       ...funnel,
       id: funnelId || v4(),
       subAccountId: subaccountId,
+      agencyId: Id || agencyId,
     },
   });
 
@@ -863,8 +871,9 @@ export const upsertContact = async (
 };
 
 export const getFunnels = async (subacountId: string) => {
+  let agencyId = await getAgencyId();
   const funnels = await db.funnel.findMany({
-    where: { subAccountId: subacountId },
+    where: { agencyId: agencyId },
     include: { FunnelPages: true },
   });
 
@@ -902,7 +911,12 @@ export const upsertFunnelPage = async (
   funnelPage: UpsertFunnelPage,
   funnelId: string
 ) => {
+  console.log("funnel page", funnelPage);
+  console.log("funnel page", subaccountId);
+  console.log("funnel page", funnelId);
   if (!subaccountId || !funnelId) return;
+
+  console.log("funnel page", funnelPage);
   const response = await db.funnelPage.upsert({
     where: { id: funnelPage.id || "" },
     update: { ...funnelPage },
@@ -954,8 +968,9 @@ export const getDomainContent = async (subDomainName: string) => {
 };
 
 export const getPipelines = async (subaccountId: string) => {
+  let agencyId = await getAgencyId();
   const response = await db.pipeline.findMany({
-    where: { subAccountId: subaccountId },
+    where: { agencyId: agencyId },
     include: {
       Lane: {
         include: { Tickets: true },

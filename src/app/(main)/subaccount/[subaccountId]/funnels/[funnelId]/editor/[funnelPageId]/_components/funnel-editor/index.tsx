@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { EyeOff } from "lucide-react";
 import React, { useEffect } from "react";
 import Recursive from "./funnel-editor-components/Recursive";
+import { getFunnelPageDetails } from "@/lib/queries";
 
 type Props = { pageId: string; liveMode?: boolean };
 
@@ -21,6 +22,22 @@ const FunnelEditor = ({ pageId, liveMode }: Props) => {
 
     console.log(state.editor);
   }, [liveMode]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getFunnelPageDetails(pageId);
+      if (!response) return;
+
+      dispatch({
+        type: "LOAD_DATA",
+        payload: {
+          elements: response.content ? JSON.parse(response?.content) : "",
+          withLive: !!liveMode,
+        },
+      });
+    };
+    fetchData();
+  }, [pageId]);
 
   const handleClick = () => {
     dispatch({

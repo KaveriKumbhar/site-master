@@ -24,18 +24,18 @@ import {
   Undo2,
 } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { FocusEventHandler, useEffect } from "react";
 import { toast } from "sonner";
 
 type Props = {
-  funnelId: string;
+  funnelId?: string;
   funnelPageDetails?: FunnelPage;
-  subaccountId: string;
+  subaccountId?: string;
 };
 
 const FunnelEditorNavigation = ({
-  funnelId,
   funnelPageDetails = {
     id: "1",
     name: "Name",
@@ -46,12 +46,12 @@ const FunnelEditorNavigation = ({
     content: null,
     order: 0,
     previewImage: null,
-    funnelId: "1",
+    funnelId: "",
   },
-  subaccountId,
 }: Props) => {
   const router = useRouter();
   const { state, dispatch } = useEditor();
+  const { funnelId, subaccountId, funnelPageId } = useParams();
 
   const handleOnBlurTitleChange: FocusEventHandler<HTMLInputElement> = async (
     event
@@ -95,6 +95,16 @@ const FunnelEditorNavigation = ({
 
   const handleOnSave = async () => {
     const content = JSON.stringify(state.editor.elements);
+
+    console.log({
+      subaccountId,
+      content: {
+        ...funnelPageDetails,
+        content,
+      },
+      funnelId,
+    });
+
     try {
       const response = await upsertFunnelPage(
         subaccountId,
@@ -155,58 +165,56 @@ const FunnelEditorNavigation = ({
             }}
           >
             <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-800 rounded-lg h-fit">
-              
-                  <TabsTrigger
-                    value="Desktop"
-                    className="w-10 h-10 p-0 data-[state=active]:bg-gray-300 dark:data-[state=active]:bg-gray-700 rounded transition-all"
-                  >
-                    <Laptop className="text-gray-600 dark:text-gray-300" />
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="Tablet"
-                    className="w-10 h-10 p-0 data-[state=active]:bg-gray-300 dark:data-[state=active]:bg-gray-700 rounded transition-all"
-                  >
-                    <Tablet className="text-gray-600 dark:text-gray-300" />
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="Mobile"
-                    className="w-10 h-10 p-0 data-[state=active]:bg-gray-300 dark:data-[state=active]:bg-gray-700 rounded transition-all"
-                  >
-                    <Smartphone className="text-gray-600 dark:text-gray-300" />
-                  </TabsTrigger>
+              <TabsTrigger
+                value="Desktop"
+                className="w-10 h-10 p-0 data-[state=active]:bg-gray-300 dark:data-[state=active]:bg-gray-700 rounded transition-all"
+              >
+                <Laptop className="text-gray-600 dark:text-gray-300" />
+              </TabsTrigger>
+              <TabsTrigger
+                value="Tablet"
+                className="w-10 h-10 p-0 data-[state=active]:bg-gray-300 dark:data-[state=active]:bg-gray-700 rounded transition-all"
+              >
+                <Tablet className="text-gray-600 dark:text-gray-300" />
+              </TabsTrigger>
+              <TabsTrigger
+                value="Mobile"
+                className="w-10 h-10 p-0 data-[state=active]:bg-gray-300 dark:data-[state=active]:bg-gray-700 rounded transition-all"
+              >
+                <Smartphone className="text-gray-600 dark:text-gray-300" />
+              </TabsTrigger>
             </TabsList>
           </Tabs>
         </aside>
         <aside className="flex items-center gap-4">
-          
-              <Button
-                variant={"ghost"}
-                size={"icon"}
-                className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-all rounded-lg"
-                onClick={handlePreviewClick}
-              >
-                <EyeIcon className="text-gray-600 dark:text-gray-300" />
-              </Button>
-              <Button
-                disabled={!(state.history.currentIdx > 0)}
-                onClick={handleUndo}
-                variant={"ghost"}
-                size={"icon"}
-                className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-all rounded-lg"
-              >
-                <Undo2 className="text-gray-600 dark:text-gray-300" />
-              </Button>
-              <Button
-                disabled={
-                  !(state.history.currentIdx < state.history.history.length - 1)
-                }
-                onClick={handleRedo}
-                variant={"ghost"}
-                size={"icon"}
-                className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-all rounded-lg mr-4"
-              >
-                <Redo2 className="text-gray-600 dark:text-gray-300" />
-              </Button>
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-all rounded-lg"
+            onClick={handlePreviewClick}
+          >
+            <EyeIcon className="text-gray-600 dark:text-gray-300" />
+          </Button>
+          <Button
+            disabled={!(state.history.currentIdx > 0)}
+            onClick={handleUndo}
+            variant={"ghost"}
+            size={"icon"}
+            className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-all rounded-lg"
+          >
+            <Undo2 className="text-gray-600 dark:text-gray-300" />
+          </Button>
+          <Button
+            disabled={
+              !(state.history.currentIdx < state.history.history.length - 1)
+            }
+            onClick={handleRedo}
+            variant={"ghost"}
+            size={"icon"}
+            className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-all rounded-lg mr-4"
+          >
+            <Redo2 className="text-gray-600 dark:text-gray-300" />
+          </Button>
           <div className="flex flex-col item-center mr-4">
             <div className="flex flex-row items-center gap-4">
               <span className="text-gray-600 dark:text-gray-300">Draft</span>
@@ -214,8 +222,6 @@ const FunnelEditorNavigation = ({
               <span className="text-gray-600 dark:text-gray-300">Publish</span>
             </div>
             <span className="text-gray-500 dark:text-gray-400 text-sm">
-             
-
               Last updated: {funnelPageDetails.updatedAt.toLocaleDateString()}
             </span>
           </div>

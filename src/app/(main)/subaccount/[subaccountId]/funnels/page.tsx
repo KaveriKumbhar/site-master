@@ -6,7 +6,7 @@ import { columns } from "./columns";
 import FunnelForm from "@/components/forms/funnel-form";
 import BlurPage from "@/components/global/blur-page";
 
-const Funnels = async ({ params }: { params: { subaccountId: string } }) => {
+const Funnels = async ({ params }: { params: { subaccountId: string, agencyId: string } }) => {
   const funnels = await getFunnels(params.subaccountId);
   if (!funnels) return null;
 

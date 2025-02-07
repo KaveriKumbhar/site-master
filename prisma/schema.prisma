@@ -69,6 +69,8 @@ model User {
   role         Role           @default(SUBACCOUNT_USER)
   agencyId     String?
   Agency       Agency?        @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  subaccountId String?
+  subaccount   SubAccount?    @relation(fields: [subaccountId], references: [id], onDelete: Cascade)
   Permissions  Permissions[]
   Ticket       Ticket[]
   Notification Notification[]
@@ -112,6 +114,8 @@ model Agency {
   Notification     Notification[]
   Subscription     Subscription?
   AddOns           AddOns[]
+  pipelines        Pipeline[]
+  funnels          Funnel[]
 }
 
 model SubAccount {
@@ -133,14 +137,15 @@ model SubAccount {
   Agency           Agency                    @relation(fields: [agencyId], references: [id], onDelete: Cascade)
   SidebarOption    SubAccountSidebarOption[]
   Permissions      Permissions[]
-  Funnels          Funnel[]
   Media            Media[]
   Contact          Contact[]
   Trigger          Trigger[]
   Automation       Automation[]
-  Pipeline         Pipeline[]
+  funnels   Funnel[]
+  pipelines Pipeline[]
   Tags             Tag[]
   Notification     Notification[]
+  users            User[]
 
   @@index([agencyId])
 }
@@ -165,10 +170,13 @@ model Pipeline {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   Lane         Lane[]
-  SubAccount   SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+  subAccount   SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
   subAccountId String
+  agencyId     String?
+  Agency       Agency?    @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   @@index([subAccountId])
+  @@index([agencyId])
 }
 
 model Lane {
@@ -307,10 +315,12 @@ model Funnel {
   subDomainName String?      @unique
   favicon       String?      @db.Text
   subAccountId  String
-  SubAccount    SubAccount   @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+  subAccount    SubAccount   @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
   FunnelPages   FunnelPage[]
   liveProducts  String?      @default("[]")
   ClassName     ClassName[]
+  agencyId      String?
+  agency        Agency?      @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   @@index([subAccountId])
 }

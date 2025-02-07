@@ -10,6 +10,7 @@ import { Tabs } from "@/components/ui/tabs";
 import clsx from "clsx";
 import React from "react";
 import TabList from "./tabs";
+import { FunnelPage } from "@prisma/client";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { useEditor } from "@/providers/editor/editor-provider";
 import SettingsTab from "./tabs/settings-tab";
@@ -19,11 +20,16 @@ import DatabaseTab from "./tabs/database-tab";
 import MediaTab from "./tabs/media-tab";
 
 type Props = {
-  pageId: string;
+  funnelId: string;
+  funnelPageDetails: FunnelPage;
   subaccountId: string;
 };
 
-const FunnelSidebar = ({ pageId, subaccountId }: Props) => {
+const FunnelSidebar = ({
+  funnelId,
+  funnelPageDetails,
+  subaccountId,
+}: Props) => {
   const { state, dispatch } = useEditor();
 
   return (
@@ -35,7 +41,6 @@ const FunnelSidebar = ({ pageId, subaccountId }: Props) => {
             "mt-[6.09rem] w-12 md:w-16 z-[60] shadow-none bg-blue-100 dark:bg-slate-800 p-0 focus:border-none transition-all overflow-hidden",
             { hidden: state.editor.previewMode }
           )}
-          
         >
           {/* Keep it as it is or it will raise an error warning */}
           <SheetHeader className="text-left p-6">

@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { db } from "@/lib/db";
 import {
+  getAgencyId,
   getLanesWithTicketAndTags,
   getPipelineDetails,
   updateLanesOrder,
@@ -18,13 +19,14 @@ type Props = {
 };
 
 const PipelinePage = async ({ params }: Props) => {
+  let agencyId = await getAgencyId();
 
   const pipelineDetails = await getPipelineDetails(params.pipelineId);
   if (!pipelineDetails)
     return redirect(`/subaccount/${params.subaccountId}/pipelines`);
 
   const pipelines = await db.pipeline.findMany({
-    where: { subAccountId: params.subaccountId },
+    where: { agencyId: agencyId },
   });
 
   console.log("pipelines", pipelines);

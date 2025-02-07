@@ -19,7 +19,9 @@ const Navigation = ({ user }: Props) => {
     let id = await getAgencyId();
     console.log(id);
 
-    setAgencyId(id?.agencyId);
+    if (id !== undefined) {
+      setAgencyId(id);
+    }
   };
 
   const handleMouseEnter = (index: number) => {

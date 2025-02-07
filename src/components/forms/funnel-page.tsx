@@ -40,6 +40,7 @@ interface CreateFunnelPageProps {
   funnelId: string
   order: number
   subaccountId: string
+  agencyId: string
 }
 
 const CreateFunnelPage: React.FC<CreateFunnelPageProps> = ({
